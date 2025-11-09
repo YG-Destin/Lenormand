@@ -1,189 +1,133 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lenormand · Studio Y.Green</title>
 <style>
 :root {
-  --green: #1f9d55;
-  --bg: #fafafa;
-  --card-bg: #ffffff;
-  --shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  --green:#1f9d55;
+  --bg:#fafafa;
+  --card-bg:#ffffff;
+  --shadow:0 3px 6px rgba(0,0,0,0.15);
 }
 body {
-  font-family: "Noto Sans KR", sans-serif;
-  background: var(--bg);
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  color: #222;
+  font-family:"Noto Sans KR",sans-serif;
+  background:var(--bg);
+  margin:0;padding:0;
+  text-align:center;
+  color:#222;
 }
 header {
-  background: #fff;
-  padding: 12px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background:#fff;
+  padding:12px;
+  position:sticky;top:0;z-index:10;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
-h1 {
-  margin: 0 0 8px;
+h1{margin:0 0 8px;}
+input,select,button{
+  font-size:1rem;
+  padding:6px 10px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  margin:4px;
 }
-input,
-select,
-button {
-  font-size: 1rem;
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin: 4px;
+button{
+  cursor:pointer;
+  transition:background .2s, transform .1s;
 }
-button {
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-}
-button:active {
-  transform: scale(0.97);
-}
+button:active{transform:scale(0.97);}
 
-/* ---------- 버튼 색 ---------- */
-#mode-meaning {
-  background: #fff9c4;
-  color: #444;
-  border: 1px solid #e0d600;
-}
-#mode-meaning:hover {
-  background: #fff59d;
-}
-#mode-meaning.active {
-  background: #ffeb3b;
-  border-color: #d4b600;
-}
+/* 모드 버튼 색상 */
+#mode-meaning{background:#fff9c4;border:1px solid #e0d600;color:#444;}
+#mode-meaning:hover{background:#fff59d;}
+#mode-meaning.active{background:#ffeb3b;border-color:#d4b600;}
 
-#mode-chain {
-  background: #c8e6ff;
-  color: #003366;
-  border: 1px solid #7ecbff;
-}
-#mode-chain:hover {
-  background: #b3e0ff;
-}
-#mode-chain.active {
-  background: #64b5f6;
-  border-color: #1976d2;
-  color: #fff;
-}
+#mode-chain{background:#c8e6ff;border:1px solid #7ecbff;color:#003366;}
+#mode-chain:hover{background:#b3e0ff;}
+#mode-chain.active{background:#64b5f6;border-color:#1976d2;color:#fff;}
 
-#mode-position {
-  background: #e0f8d8;
-  color: #335533;
-  border: 1px solid #aad18b;
-}
-#mode-position:hover {
-  background: #d2f1c8;
-}
-#mode-position.active {
-  background: #a5d6a7;
-  border-color: #6fa96f;
-  color: #fff;
-}
+#mode-position{background:#e0f8d8;border:1px solid #aad18b;color:#335533;}
+#mode-position:hover{background:#d2f1c8;}
+#mode-position.active{background:#a5d6a7;border-color:#6fa96f;color:#fff;}
 
-button[onclick*="drawSpread"] {
-  background: #c8e6c9;
-  color: #225522;
-  border: 1px solid #99cc99;
+button[onclick*="drawSpread"]{
+  background:#c8e6c9;border:1px solid #99cc99;color:#225522;
 }
-button[onclick*="drawSpread"]:hover {
-  background: #a5d6a7;
-}
-button[onclick*="drawSpread"]:active {
-  background: #81c784;
-  color: #fff;
-}
+button[onclick*="drawSpread"]:hover{background:#a5d6a7;}
+button[onclick*="drawSpread"]:active{background:#81c784;color:#fff;}
 
-main {
-  padding: 12px;
+main{padding:12px;}
+.board{
+  display:grid;
+  gap:8px;
+  justify-items:center;
+  justify-content:center;
 }
-.board {
-  display: grid;
-  gap: 8px;
-  justify-items: center;
-  justify-content: center;
+.bottom4{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:8px;
 }
-.bottom4 {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
+.card{
+  width:80px;height:110px;
+  background:var(--card-bg);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:0.9rem;
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease;
+  position:relative;
 }
-.card {
-  width: 80px;
-  height: 110px;
-  background: var(--card-bg);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  position: relative;
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 5px 10px rgba(0,0,0,0.25);
 }
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+.emoji{
+  font-size:1.8rem;
+  margin-bottom:4px;
 }
-.card img {
-  margin-bottom: 4px;
+.meaning{
+  display:none;
+  font-size:0.75rem;
+  color:#333;
+  margin-top:4px;
 }
-.meaning {
-  display: none;
-  font-size: 0.75rem;
-  color: #333;
-  margin-top: 4px;
+.highlight{outline:3px solid var(--green);}
+.order-badge{
+  position:absolute;
+  background:var(--green);
+  color:#fff;
+  border-radius:50%;
+  width:18px;height:18px;
+  font-size:0.7rem;line-height:18px;
+  top:2px;left:2px;
 }
-.highlight {
-  outline: 3px solid var(--green);
+.pos-input{
+  width:90%;
+  margin-top:4px;
+  font-size:0.7rem;
+  border:1px solid #ccc;
+  border-radius:4px;
+  padding:2px 4px;
 }
-.order-badge {
-  position: absolute;
-  background: var(--green);
-  color: #fff;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 0.7rem;
-  line-height: 18px;
-  top: 2px;
-  left: 2px;
-}
-.pos-input {
-  width: 90%;
-  margin-top: 4px;
-  font-size: 0.7rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 2px 4px;
-}
-footer {
-  font-size: 0.75rem;
-  color: #888;
-  margin-top: 24px;
-}
+footer{font-size:0.8rem;color:#888;margin-top:24px;line-height:1.6;}
 </style>
 </head>
-
 <body>
+
 <header>
   <h1>Lenormand · Studio Y.Green</h1>
   <p style="font-size:0.8rem;color:#666;margin-top:4px;">
-  (제작자 개인의 편의를 위해 만든 사이트로, 모든 이미지는 인터넷에 공유된 것으로 만들어졌습니다. 언제든 무료 이미지로 수정될 수 있습니다.)
+  (제작자 개인의 편의를 위해 만든 사이트로, 모든 이미지는 OS 내장 이모지로 표시되며, 언제든 Unicode 표준에 따라 변경될 수 있습니다.)
   </p>
   <div>
-    <input id="question" placeholder="오늘의 질문을 입력하세요" />
+    <input id="question" placeholder="오늘의 질문을 입력하세요">
     <select id="spread">
       <option value="2x1">2장 (2×1)</option>
       <option value="3x1">3장 (3×1)</option>
@@ -200,7 +144,7 @@ footer {
     <button id="mode-chain">체인 보기</button>
     <button id="mode-position">자리 기록</button>
   </div>
-  <button id="drawButton">카드 뽑기</button>
+  <button onclick="drawSpread()">카드 뽑기</button>
 </header>
 
 <main>
@@ -212,199 +156,209 @@ footer {
 <footer>
 © 2025 Studio Y.Green. All Rights Reserved.<br>
 본 페이지의 HTML, CSS, JavaScript 코드는 Studio Y.Green의 창작물로 저작권법의 보호를 받습니다.<br>
-페이지에 사용된 이미지 및 일러스트의 저작권은 각 원저작자에게 있습니다.<br>
+페이지에 사용된 이모지는 Unicode 표준에 따른 OS 내장 폰트를 기반으로 표시되며,<br>
+별도의 이미지 파일을 포함하지 않습니다.<br>
 무단 복제, 배포, 코드 변형 및 상업적 이용을 금합니다.<br>
-<small>✨️ 제작 : 연유🌱</small>
+<small style="color:#888;">✨ 제작 : 연유🌱</small>
 </footer>
 
 <script>
-// ---------- 카드 데이터 ----------
 const cards = [
-{ num: 1, name: "Rider", img: "https://upload.wikimedia.org/wikipedia/commons/5/57/Horse_font_awesome.svg", meaning: "소식, 움직임" },
-{ num: 2, name: "Clover", img: "https://upload.wikimedia.org/wikipedia/commons/0/09/Clover_icon.svg", meaning: "작은 행운, 짧음" },
-{ num: 3, name: "Ship", img: "https://upload.wikimedia.org/wikipedia/commons/3/3c/Ship_font_awesome.svg", meaning: "여행, 이동(장거리)" },
-{ num: 4, name: "House", img: "https://upload.wikimedia.org/wikipedia/commons/3/36/House_font_awesome.svg", meaning: "가정, 안정" },
-{ num: 5, name: "Tree", img: "https://upload.wikimedia.org/wikipedia/commons/f/f3/Tree_font_awesome.svg", meaning: "건강, 성장, 조상" },
-{ num: 6, name: "Clouds", img: "https://upload.wikimedia.org/wikipedia/commons/f/f6/Cloud_font_awesome.svg", meaning: "혼란, 불확실" },
-{ num: 7, name: "Snake", img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Snake_font_awesome.svg", meaning: "복잡함, 유혹, 길다" },
-{ num: 8, name: "Coffin", img: "https://upload.wikimedia.org/wikipedia/commons/3/35/Coffin_font_awesome.svg", meaning: "끝, 변화, 상자" },
-{ num: 9, name: "Bouquet", img: "https://upload.wikimedia.org/wikipedia/commons/1/1e/Flower_font_awesome.svg", meaning: "호의, 선물" },
-{ num: 10, name: "Scythe", img: "https://upload.wikimedia.org/wikipedia/commons/8/8c/Scythe_font_awesome.svg", meaning: "단절, 결단, 수확" },
-{ num: 11, name: "Whip", img: "https://upload.wikimedia.org/wikipedia/commons/f/fc/Whip_font_awesome.svg", meaning: "논쟁, 반복" },
-{ num: 12, name: "Birds", img: "https://upload.wikimedia.org/wikipedia/commons/4/44/Bird_font_awesome.svg", meaning: "대화, 수다" },
-{ num: 13, name: "Child", img: "https://upload.wikimedia.org/wikipedia/commons/4/43/Child_font_awesome.svg", meaning: "시작, 순수함, 아이" },
-{ num: 14, name: "Fox", img: "https://upload.wikimedia.org/wikipedia/commons/9/91/Fox_font_awesome.svg", meaning: "교활함, 주의, 일" },
-{ num: 15, name: "Bear", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/Bear_font_awesome.svg", meaning: "보호, 권위, 부모" },
-{ num: 16, name: "Stars", img: "https://upload.wikimedia.org/wikipedia/commons/3/35/Star_font_awesome.svg", meaning: "희망, 명확함, 인터넷(, 때로 점성술)" },
-{ num: 17, name: "Stork", img: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Stork_font_awesome.svg", meaning: "변화, 이동" },
-{ num: 18, name: "Dog", img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Dog_font_awesome.svg", meaning: "우정, 충성" },
-{ num: 19, name: "Tower", img: "https://upload.wikimedia.org/wikipedia/commons/8/8f/Tower_font_awesome.svg", meaning: "조직, 거리감" },
-{ num: 20, name: "Garden", img: "https://upload.wikimedia.org/wikipedia/commons/3/31/Tree_font_awesome.svg", meaning: "모임, 사회" },
-{ num: 21, name: "Mountain", img: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Mountain_font_awesome.svg", meaning: "장애, 지연" },
-{ num: 22, name: "Crossroads", img: "https://upload.wikimedia.org/wikipedia/commons/8/84/Signpost_font_awesome.svg", meaning: "선택, 갈림길" },
-{ num: 23, name: "Mice", img: "https://upload.wikimedia.org/wikipedia/commons/6/6e/Mouse_font_awesome.svg", meaning: "손실, 소모" },
-{ num: 24, name: "Heart", img: "https://upload.wikimedia.org/wikipedia/commons/0/02/Heart_font_awesome.svg", meaning: "사랑, 감정" },
-{ num: 25, name: "Ring", img: "https://upload.wikimedia.org/wikipedia/commons/4/46/Ring_font_awesome.svg", meaning: "약속, 반복" },
-{ num: 26, name: "Book", img: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Book_font_awesome.svg", meaning: "비밀, 학문" },
-{ num: 27, name: "Letter", img: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Envelope_font_awesome.svg", meaning: "소식, 문서" },
-{ num: 28, name: "Man", img: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Male_font_awesome.svg", meaning: "남성, 본인" },
-{ num: 29, name: "Woman", img: "https://upload.wikimedia.org/wikipedia/commons/0/0a/Female_font_awesome.svg", meaning: "여성, 본인" },
-{ num: 30, name: "Lily", img: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Lily_font_awesome.svg", meaning: "평화, 성숙" },
-{ num: 31, name: "Sun", img: "https://upload.wikimedia.org/wikipedia/commons/1/18/Sun_font_awesome.svg", meaning: "성공, 활력(, 때로 점성술)" },
-{ num: 32, name: "Moon", img: "https://upload.wikimedia.org/wikipedia/commons/4/47/Moon_font_awesome.svg", meaning: "명예, 감정, 주기(, 때로 점성술)" },
-{ num: 33, name: "Key", img: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Key_font_awesome.svg", meaning: "해결, 접근" },
-{ num: 34, name: "Fish", img: "https://upload.wikimedia.org/wikipedia/commons/d/d6/Fish_font_awesome.svg", meaning: "재물, 흐름" },
-{ num: 35, name: "Anchor", img: "https://upload.wikimedia.org/wikipedia/commons/8/84/Anchor_font_awesome.svg", meaning: "안정, 지속" },
-{ num: 36, name: "Cross", img: "https://upload.wikimedia.org/wikipedia/commons/8/84/Cross_font_awesome.svg", meaning: "시련, 부담, 책임" }
+{ num:1, name:"Rider", img:"🐎", meaning:"소식, 움직임" },
+{ num:2, name:"Clover", img:"🍀", meaning:"작은 행운, 짧음" },
+{ num:3, name:"Ship", img:"⛵️", meaning:"여행, 이동(장거리)" },
+{ num:4, name:"House", img:"🏡", meaning:"가정, 안정" },
+{ num:5, name:"Tree", img:"🌳", meaning:"건강, 성장, 조상" },
+{ num:6, name:"Clouds", img:"⛅️", meaning:"혼란, 불확실" },
+{ num:7, name:"Snake", img:"🐍", meaning:"복잡함, 유혹, 길다" },
+{ num:8, name:"Coffin", img:"⚰️", meaning:"끝, 변화, 상자" },
+{ num:9, name:"Bouquet", img:"💐", meaning:"호의, 선물" },
+{ num:10, name:"Scythe", img:"✂️", meaning:"단절, 결단, 수확" },
+{ num:11, name:"Whip", img:"🌊", meaning:"논쟁, 반복" },
+{ num:12, name:"Birds", img:"🐦", meaning:"대화, 수다" },
+{ num:13, name:"Child", img:"👶", meaning:"시작, 순수함, 아이" },
+{ num:14, name:"Fox", img:"🦊", meaning:"교활함, 주의, 일" },
+{ num:15, name:"Bear", img:"🐻", meaning:"보호, 권위, 부모" },
+{ num:16, name:"Stars", img:"⭐️", meaning:"희망, 명확함, 인터넷(, 때로 점성술)" },
+{ num:17, name:"Stork", img:"✈️", meaning:"변화, 이동" },
+{ num:18, name:"Dog", img:"🐶", meaning:"우정, 충성" },
+{ num:19, name:"Tower", img:"🗼", meaning:"조직, 거리감" },
+{ num:20, name:"Garden", img:"🎡", meaning:"모임, 사회" },
+{ num:21, name:"Mountain", img:"⛰️", meaning:"장애, 지연" },
+{ num:22, name:"Crossroads", img:"🚏", meaning:"선택, 갈림길" },
+{ num:23, name:"Mice", img:"🐭", meaning:"손실, 소모" },
+{ num:24, name:"Heart", img:"❤️", meaning:"사랑, 감정" },
+{ num:25, name:"Ring", img:"💍", meaning:"약속, 반복" },
+{ num:26, name:"Book", img:"📚", meaning:"비밀, 학문" },
+{ num:27, name:"Letter", img:"✉️", meaning:"소식, 문서" },
+{ num:28, name:"Man", img:"👦", meaning:"남성, 본인" },
+{ num:29, name:"Woman", img:"👩", meaning:"여성, 본인" },
+{ num:30, name:"Lily", img:"⚜️", meaning:"평화, 성숙" },
+{ num:31, name:"Sun", img:"☀️", meaning:"성공, 활력(, 때로 점성술)" },
+{ num:32, name:"Moon", img:"🌙", meaning:"명예, 감정, 주기(, 때로 점성술)" },
+{ num:33, name:"Key", img:"🔐", meaning:"해결, 접근" },
+{ num:34, name:"Fish", img:"🐠", meaning:"재물, 흐름" },
+{ num:35, name:"Anchor", img:"⚓️", meaning:"안정, 지속" },
+{ num:36, name:"Cross", img:"➕️", meaning:"시련, 부담, 책임" }
 ];
 
-let mode = "none";
+let mode = "meaning";
 
-// ---------- 스프레드 ----------
-function drawSpread() {
-  const board = document.getElementById("board");
-  const bottom4 = document.getElementById("bottom4");
-  const spread = document.getElementById("spread").value;
+function drawSpread(){
+  const board = document.getElementById('board');
+  const bottom4 = document.getElementById('bottom4');
+  const spread = document.getElementById('spread').value;
   board.innerHTML = "";
   bottom4.innerHTML = "";
-  let rows = 1,
-    cols = 1,
-    total = 0;
-  switch (spread) {
-    case "2x1": rows = 1; cols = 2; total = 2; break;
-    case "3x1": rows = 1; cols = 3; total = 3; break;
-    case "4x2": rows = 2; cols = 2; total = 4; break;
-    case "5x1": rows = 1; cols = 5; total = 5; break;
-    case "6x2": rows = 2; cols = 3; total = 6; break;
-    case "6x3": rows = 3; cols = 2; total = 6; break;
-    case "9x3": rows = 3; cols = 3; total = 9; break;
-    case "36x8": rows = 4; cols = 8; total = 36; break;
-  }
-  const shuffled = [...cards].sort(() => Math.random() - 0.5);
-  const chosen = shuffled.slice(0, total);
 
-  if (spread === "36x8") {
-    board.style.gridTemplateColumns = "repeat(8,1fr)";
-    chosen.slice(0, 32).forEach((c) => board.appendChild(makeCard(c)));
-    bottom4.style.display = "flex";
-    bottom4.innerHTML = "";
-    chosen.slice(32).forEach((c) => bottom4.appendChild(makeCard(c)));
-  } else {
-    board.style.gridTemplateColumns = `repeat(${cols},1fr)`;
-    chosen.forEach((c) => board.appendChild(makeCard(c)));
-    bottom4.innerHTML = "";
-    bottom4.style.display = "none";
+  let rows=1, cols=1, total=0;
+  switch(spread){
+    case "2x1": rows=1; cols=2; total=2; break;
+    case "3x1": rows=1; cols=3; total=3; break;
+    case "4x2": rows=2; cols=2; total=4; break;
+    case "5x1": rows=1; cols=5; total=5; break;
+    case "6x2": rows=2; cols=3; total=6; break;
+    case "6x3": rows=3; cols=2; total=6; break;
+    case "9x3": rows=3; cols=3; total=9; break;
+    case "36x8": rows=4; cols=8; total=36; break;
+  }
+
+  const shuffled = [...cards].sort(()=>Math.random()-0.5);
+  const chosen = shuffled.slice(0,total);
+
+  if(spread==="36x8"){
+    board.style.gridTemplateColumns="repeat(8,1fr)";
+    chosen.slice(0,32).forEach(c=>board.appendChild(makeCard(c)));
+    bottom4.style.display="flex";
+    bottom4.innerHTML="";
+    chosen.slice(32).forEach(c=>bottom4.appendChild(makeCard(c)));
+  }else{
+    board.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+    chosen.forEach(c=>board.appendChild(makeCard(c)));
+    bottom4.innerHTML="";
+    bottom4.style.display="none";
   }
   resetHighlights();
 }
 
-// ---------- 카드 ----------
-function makeCard(c) {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.dataset.number = c.num;
-  d.innerHTML = `<img src="${c.img}" width="34"><div>${c.num}. ${c.name}</div>`;
+function makeCard(c){
+  const d=document.createElement('div');
+  d.className='card';
+  d.dataset.number=c.num;
+  d.innerHTML=`<div class="emoji">${c.img}</div><div>${c.num}. ${c.name}</div>`;
   return d;
 }
 
-// ---------- 버튼 ----------
-document.querySelectorAll("#mode-meaning,#mode-chain,#mode-position").forEach((btn) => {
-  btn.addEventListener("click", () => setActiveButton(btn.id));
-});
-document.getElementById("drawButton").addEventListener("click", drawSpread);
+// 모드 변경 버튼
+document.getElementById("mode-meaning").onclick = ()=>{
+  toggleMode("meaning","mode-meaning");
+};
+document.getElementById("mode-chain").onclick = ()=>{
+  toggleMode("chain","mode-chain");
+};
+document.getElementById("mode-position").onclick = ()=>{
+  toggleMode("position","mode-position");
+};
 
-function setActiveButton(id) {
-  const btn = document.getElementById(id);
-  const isActive = btn.classList.contains("active");
-  document.querySelectorAll("#mode-meaning,#mode-chain,#mode-position").forEach((b) => b.classList.remove("active"));
-  if (isActive) { mode = "if (isActive) { mode = "none"; return; }
-  btn.classList.add("active");
-  if (id === "mode-meaning") mode = "meaning";
-  else if (id === "mode-chain") mode = "chain";
-  else if (id === "mode-position") mode = "position";
-  else mode = "none";
-  if (mode === "position") activatePositionMode();
-  else resetHighlights();
+function toggleMode(newMode,id){
+  const btn=document.getElementById(id);
+  if(mode===newMode){
+    mode="none";
+    btn.classList.remove('active');
+  }else{
+    mode=newMode;
+    document.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  resetHighlights();
+  if(mode==="position") activatePositionMode();
 }
 
-// ---------- 카드 클릭 ----------
-document.addEventListener("click", (e) => {
-  const card = e.target.closest(".card");
-  if (!card) return;
+// 카드 클릭 처리
+document.addEventListener('click', e=>{
+  const card = e.target.closest('.card');
+  if(!card) return;
   const num = parseInt(card.dataset.number);
-  if (mode === "meaning") toggleMeaning(card, num);
-  else if (mode === "chain") calculateChain(num);
+  if(mode==="meaning") toggleMeaning(card,num);
+  else if(mode==="chain") calculateChain(num);
 });
 
-// ---------- 카드 해설 ----------
-function toggleMeaning(card, num) {
-  let m = card.querySelector(".meaning");
-  if (!m) {
-    const f = cards.find((x) => x.num === num);
-    m = document.createElement("div");
-    m.className = "meaning";
-    m.textContent = f.meaning;
+function toggleMeaning(card,num){
+  let m = card.querySelector('.meaning');
+  if(!m){
+    const f = cards.find(x=>x.num===num);
+    m = document.createElement('div');
+    m.className='meaning';
+    m.textContent=f.meaning;
     card.appendChild(m);
   }
-  m.style.display = m.style.display === "block" ? "none" : "block";
+  m.style.display = m.style.display==='block' ? 'none' : 'block';
 }
 
-// ---------- 체인 ----------
-function calculateChain(start) {
+// 체인 계산
+function calculateChain(start){
   resetHighlights();
-  const all = [...document.querySelectorAll(".card")];
-  const cardAt = {}, posAt = {};
-  all.forEach((c, i) => {
-    const pos = i + 1, num = parseInt(c.dataset.number);
-    cardAt[num] = pos; posAt[pos] = num;
+  const all = [...document.querySelectorAll('.card')];
+  const posMap = {};
+  const cardAt = {};
+  all.forEach((c,i)=>{
+    const pos=i+1;
+    const num=parseInt(c.dataset.number);
+    posMap[pos]=num;
+    cardAt[num]=pos;
   });
-  const seq = [];
-  let cur = start;
-  for (let i = 0; i < 3; i++) {
-    if (!cardAt[cur]) break;
-    seq.push(cur);
-    const next = posAt[cardAt[cur] + 1] || posAt[cardAt[cur] + 8] || null;
-    if (!next || seq.includes(next)) break;
-    cur = next;
+
+  const visited=new Set();
+  let current=start;
+  const chainSeq=[];
+  while(!visited.has(current)){
+    visited.add(current);
+    chainSeq.push(current);
+    const currentPos=cardAt[current];
+    const next=cardAt[currentPos];
+    if(!next||visited.has(next)) break;
+    current=next;
   }
-  seq.forEach((n, i) => {
-    const c = all.find((x) => parseInt(x.dataset.number) === n);
-    if (c) {
-      c.classList.add("highlight");
-      const b = document.createElement("div");
-      b.className = "order-badge";
-      b.textContent = i + 1;
-      c.appendChild(b);
-    }
-  });
-  const chainDisplay = document.getElementById("chainDisplay");
-  chainDisplay.innerHTML = `<p><b>체인 순서</b><br>${seq.map((n) => {
-    const c = cards.find((x) => x.num === n);
-    return `${c.name}(${c.num})`;
-  }).join(" → ")}</p>`;
+
+  const chainDisplay=document.getElementById('chainDisplay');
+  chainDisplay.innerHTML="<h3>체인 순서</h3>";
+  chainSeq.forEach((num,idx)=>{
+  const cardElem=all.find(c=>parseInt(c.dataset.number)===num);
+  if(cardElem){
+    cardElem.classList.add('highlight');
+    const badge=document.createElement('div');
+    badge.className='order-badge';
+    badge.textContent=idx+1;
+    cardElem.appendChild(badge);
+  }
+  const info=cards.find(c=>c.num===num);
+  const span=document.createElement('span');
+  span.innerHTML=`${idx+1}) ${info.img} ${info.name} (${num}) `;
+  chainDisplay.appendChild(span);
+});
 }
 
-// ---------- 자리 기록 ----------
-function activatePositionMode() {
-  resetHighlights();
-  document.querySelectorAll(".card").forEach((c) => {
-    if (!c.querySelector(".pos-input")) {
-      const i = document.createElement("input");
-      i.className = "pos-input";
-      i.placeholder = "자리 의미 입력";
-      c.appendChild(i);
+// 자리기록
+function activatePositionMode(){
+  document.querySelectorAll('.card').forEach((c,i)=>{
+    if(!c.querySelector('.pos-input')){
+      const inp=document.createElement('input');
+      inp.className='pos-input';
+      inp.type='text';
+      inp.placeholder=`자리 ${i+1} 의미`;
+      c.appendChild(inp);
     }
   });
 }
 
-// ---------- 초기화 ----------
-function resetHighlights() {
-  document.querySelectorAll(".card").forEach((c) => {
-    c.classList.remove("highlight");
-    const b = c.querySelector(".order-badge");
-    if (b) b.remove();
+// 하이라이트 초기화
+function resetHighlights(){
+  document.querySelectorAll('.card').forEach(c=>{
+    c.classList.remove('highlight');
+    const b=c.querySelector('.order-badge');
+    if(b) b.remove();
   });
-  document.getElementById("chainDisplay").innerHTML = "";
+  document.getElementById('chainDisplay').innerHTML="";
 }
 </script>
 </body>
